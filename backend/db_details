@@ -1,0 +1,38 @@
+CREATE DATABASE dormsforyou;
+
+--------------------------------------------
+ \c dormsforyou;
+
+ -------------------------------------------
+create table register_user(
+userid bigserial primary key,
+full_name varchar(200) not null,
+email varchar(200) not null,
+dob date not null,
+college_name varchar(200) not null,
+password varchar(200) not null,
+unique(email));
+
+-----------------------------------------------
+create table colleges(
+cid int primary key,
+college_name varchar(200) not null,
+address varchar(200) not null
+);
+
+---------------------------------------------
+create table hostels(
+hid int primary key,
+name varchar(200) not null,
+collegeID int references colleges(cid),
+adminname varchar(200) not null,
+caddress varchar(200) not null,
+contact varchar(200) not null,
+roomUrls varchar(200) not null,
+description varchar(200) not null,
+roomPrice real not null,
+roomMateCount int not null,
+availableRoomCount int not null,
+longitude real not null,
+latitude  real not null
+);
