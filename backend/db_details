@@ -1,9 +1,19 @@
+------------------------------------------
+CREATE DATABASE
+------------------------------------------
+
 CREATE DATABASE dormsforyou;
 
 --------------------------------------------
+USE database
+--------------------------------------------
+
  \c dormsforyou;
 
  -------------------------------------------
+ REGISTER_USER TABLE
+ ------------------------------------------
+
 create table register_user(
 userid bigserial primary key,
 full_name varchar(200) not null,
@@ -14,6 +24,9 @@ password varchar(200) not null,
 unique(email));
 
 -----------------------------------------------
+COLLEGES TABLE
+-----------------------------------------------
+
 create table colleges(
 cid int primary key,
 college_name varchar(200) not null,
@@ -21,10 +34,12 @@ address varchar(200) not null
 );
 
 ---------------------------------------------
+HOSTELS TABLE
+---------------------------------------------
+
 create table hostels(
 hid int primary key,
 name varchar(200) not null,
-collegeID int references colleges(cid),
 adminname varchar(200) not null,
 caddress varchar(200) not null,
 contact varchar(200) not null,
@@ -35,4 +50,12 @@ roomMateCount int not null,
 availableRoomCount int not null,
 longitude real not null,
 latitude  real not null
+);
+
+----------------------------------------------
+HOSTELSCOLLEGES TABLE
+----------------------------------------------
+create table HostelsColleges(
+hid int references hostels(hid),
+cid int references colleges(cid)
 );
