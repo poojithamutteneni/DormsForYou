@@ -5,26 +5,26 @@ import 'package:http/http.dart' as http;
 import 'models/user.dart';
 
 abstract class IAuthenticationReposiory {
-  Future<AuthUser> signUp(
-      String username, String password, String phoneNumber, String email);
-  Future<AuthUser> signIn(String username, String password);
-  Future<void> logout();
+  Future<AuthUser> signUp(String email, String password);
+  Future<AuthUser> signIn(String email, String password);
+  Future<AuthUser> logout();
 }
 
 class AuthFailed implements Exception {
   final String msg;
   AuthFailed({
-    this.msg,
+    required this.msg,
   });
 }
 
 class AuthenticationRepository implements IAuthenticationReposiory {
   static const String url = "something.com";
   @override
-  Future<void> logout() async {
+  Future<AuthUser> logout() async {
     http.Response res = await http.get(Uri.parse("$url"));
     if (res.statusCode == 200) {
       print(res.body);
+      return AuthUser.empty();
     } else {
       throw AuthFailed(msg: "Failed to get colleges from server!");
     }
@@ -43,15 +43,9 @@ class AuthenticationRepository implements IAuthenticationReposiory {
   }
 
   @override
-  Future<AuthUser> signUp(String username, String password, String phoneNumber,
-      String email) async {
-    http.Response res =
-        await http.post(Uri.parse("$url"), headers: <String, String>{
-      'username': username,
-      'password': password,
-      "number": phoneNumber,
-      "email": email
-    });
+  Future<AuthUser> signUp(String email, String password) async {
+    http.Response res = await http.post(Uri.parse("$url"),
+        headers: <String, String>{'password': password, "email": email});
     if (res.statusCode == 200) {
       print(res.body);
       return AuthUser.fromJson(json.decode(res.body));

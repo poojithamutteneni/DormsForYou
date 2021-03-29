@@ -4,7 +4,16 @@ abstract class DormEvent {
   const DormEvent();
 }
 
-class GetHostelsNearBy implements DormEvent {}
+class GetHostelsNearBy implements DormEvent {
+  const GetHostelsNearBy();
+}
+
+class OpenMaps implements DormEvent {
+  const OpenMaps(this.lat, this.lon);
+  final String lat, lon;
+}
+
+class ResetErrors implements DormEvent {}
 
 class GetHostelsByCID implements DormEvent {
   final int id;
