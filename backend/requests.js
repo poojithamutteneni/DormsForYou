@@ -46,8 +46,8 @@ try{
 //get hostels by cid
 app.post('/gethostelsbycid', (req,res) =>{
  let cid = parseInt(req.headers["cid"]);
- console.log(cid);
- pool.query("select name from hostels join HostelsColleges on  HostelsColleges.cid = $1 group by hostels.name ",[cid],
+ // console.log(cid);
+ pool.query("select hostels.* from hostels join HostelsColleges on  HostelsColleges.cid = $1 group by hostels.hid, hostels.name;",[cid],
      function (err, result) {
          if (err) {
              console.log(err);
@@ -66,12 +66,12 @@ app.post('/getHostelsNearbyCurrentLocation', async (req,res) =>{
   let minlon =  parseFloat(req.headers["longitude"]) - 0.5;
   let maxlon =  parseFloat(req.headers["longitude"]) + 0.5;
   let hostels;
-  
+
   try{
   while(1){
     let r = await pool.query("Select * from hostels where latitude >= $1 AND latitude <= $2 AND longitude >= $3 AND longitude <= $4; ", [minlat, maxlat, minlon,maxlon]);
     hostels = (r.rows);
-    
+
     if(r.rows.length >= 2){
       break;
     }

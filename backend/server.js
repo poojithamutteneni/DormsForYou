@@ -11,6 +11,7 @@ const cors = require('cors');
 
 
 
+
 //PORT
 const PORT = process.env.PORT || 6000;
 
@@ -22,6 +23,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use('/auth',authentication)
 app.use('/request', requests)
+app.use(express.static('public'))
 
 
 
