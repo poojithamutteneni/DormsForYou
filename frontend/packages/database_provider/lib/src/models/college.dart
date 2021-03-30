@@ -21,9 +21,9 @@ class College {
 
   factory College.fromMap(Map<String, dynamic> map) {
     return College(
-      name: map['name'],
+      name: map['college_name'],
       address: map['address'],
-      id: map['id'],
+      id: map['cid'],
     );
   }
 

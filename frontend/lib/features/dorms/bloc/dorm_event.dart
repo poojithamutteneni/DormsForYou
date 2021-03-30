@@ -8,6 +8,11 @@ class GetHostelsNearBy implements DormEvent {
   const GetHostelsNearBy();
 }
 
+class SetSearchType implements DormEvent {
+  final bool val;
+  const SetSearchType(this.val);
+}
+
 class OpenMaps implements DormEvent {
   const OpenMaps(this.lat, this.lon);
   final String lat, lon;

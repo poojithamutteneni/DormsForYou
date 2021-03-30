@@ -7,6 +7,7 @@ const { Pool, Client } = require('pg');
 const tokenauth = require("./token");
 const authentication = require("./authentication");
 const requests = require("./requests");
+const cors = require('cors');
 
 
 
@@ -16,8 +17,9 @@ const PORT = process.env.PORT || 6000;
 
 //Initialize
 const app = express();
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+app.use(cors())
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 app.use('/auth',authentication)
 app.use('/request', requests)
 

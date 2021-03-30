@@ -13,16 +13,17 @@ abstract class IDatabaseProvider {
 }
 
 class DatabaseProvider implements IDatabaseProvider {
-  static const String url = "example.com";
+  static const String url = "http://192.168.1.106:6000";
   @override
   Future<List<College>> getCollegesByName(String name) async {
-    final u = Uri.parse('$url');
+    final u = Uri.parse('$url/request/getcollegesbyname');
+    print("object");
     http.Response res =
-        await http.get(u, headers: <String, String>{'name': name});
+        await http.post(u, headers: <String, String>{'name': name});
+    print(res.body);
     if (res.statusCode == 200) {
-      print(res.body);
       final Iterable l = json.decode(res.body);
-      return List.from(l.map((e) => College.fromJson(e)));
+      return List.from(l.map((e) => College.fromMap(e)));
     } else {
       throw Exception("Failed to get colleges from server!");
     }
@@ -31,27 +32,30 @@ class DatabaseProvider implements IDatabaseProvider {
   @override
   Future<List<Hostel>> getCurrentNearbyHostels(
       double latitude, double longitude) async {
-    final u = Uri.parse('$url');
-    http.Response res = await http.get(u,
-        headers: {'lon': longitude.toString(), "lat": latitude.toString()});
+    print(url);
+    final u = Uri.parse('$url/request/getHostelsNearbyCurrentLocation');
+    http.Response res = await http.post(u, headers: <String, String>{
+      'longitude': longitude.toString(),
+      "latitude": latitude.toString()
+    });
     if (res.statusCode == 200) {
       print(res.body);
       final Iterable l = json.decode(res.body);
-      return List.from(l.map((e) => Hostel.fromJson(e)));
+      return List.from(l.map((e) => Hostel.fromMap(e)));
     } else {
-      throw Exception("Failed to get colleges from server!");
+      throw Exception("Failed to get hostels from server!");
     }
   }
 
   @override
   Future<List<Hostel>> getHostelByName(String name) async {
-    final u = Uri.parse('$url');
+    final u = Uri.parse('$url/request/gethostelsbyname');
     http.Response res =
-        await http.get(u, headers: <String, String>{'name': name});
+        await http.post(u, headers: <String, String>{'name': name});
     if (res.statusCode == 200) {
       print(res.body);
       final Iterable l = json.decode(res.body);
-      return List.from(l.map((e) => Hostel.fromJson(e)));
+      return List.from(l.map((e) => Hostel.fromMap(e)));
     } else {
       throw Exception("Failed to get colleges from server!");
     }
@@ -59,13 +63,13 @@ class DatabaseProvider implements IDatabaseProvider {
 
   @override
   Future<List<Hostel>> getHostelsByCID(int id) async {
-    final u = Uri.parse('$url');
+    final u = Uri.parse('$url/request/gethostelsbycid');
     http.Response res =
-        await http.get(u, headers: <String, String>{'name': id.toString()});
+        await http.post(u, headers: <String, String>{'name': id.toString()});
     if (res.statusCode == 200) {
       print(res.body);
       final Iterable l = json.decode(res.body);
-      return List.from(l.map((e) => Hostel.fromJson(e)));
+      return List.from(l.map((e) => Hostel.fromMap(e)));
     } else {
       throw Exception("Failed to get colleges from server!");
     }

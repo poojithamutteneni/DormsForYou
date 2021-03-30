@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:dorms_for_you/di.dart';
 import 'package:dorms_for_you/features/authentication/cubit/authentication_cubit.dart';
 import 'package:dorms_for_you/features/dorms/bloc/dorm_bloc.dart';
@@ -24,9 +25,11 @@ class MyApp extends StatelessWidget {
       home: MultiBlocProvider(
         providers: [
           BlocProvider(
+              lazy: false,
               create: (context) =>
                   getIt.get<AuthenticationCubit>()..authenticate()),
           BlocProvider(
+              lazy: false,
               create: (context) =>
                   getIt.get<DormBloc>()..add(const GetHostelsNearBy()))
         ],

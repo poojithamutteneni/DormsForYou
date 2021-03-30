@@ -10,8 +10,8 @@ const tokenauth = require("./token");
 
 //Initialize
 const app = express.Router();
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 
 
 
@@ -21,7 +21,7 @@ const pool = new Pool({
     user: "postgres",
     host: "localhost",
     database: "dormsforyou",
-    password: process.env.p,
+    password: "password",
     port: 5432
 });
 
@@ -89,13 +89,14 @@ app.post('/getHostelsNearbyCurrentLocation', async (req,res) =>{
   let hostels;
   try{
   for(let i = 0; i <= 2; ){
-  let r = await pool.query("Select * from hostels where latitude >= $1 AND latitude <= $2 AND longitude >= $3 AND longitude <= $4; ", [minlat, maxlat, minlon,maxlon]);
-  hostels = (r.rows);
-  if(r.rows.length > 0) i++;
-  // console.log(minlat + " " + maxlat);
-    minlat -= 0.5;  maxlat += 0.5; minlon -= 0.5; maxlon += 0.5;
-    }
-    res.send(hostels);
+    let r = await pool.query("Select * from hostels where latitude >= $1 AND latitude <= $2 AND longitude >= $3 AND longitude <= $4; ", [minlat, maxlat, minlon,maxlon]);
+    hostels = (r.rows);
+    
+    if(r.rows.length > 0) i++;
+    // console.log(minlat + " " + maxlat);
+      minlat -= 0.5;  maxlat += 0.5; minlon -= 0.5; maxlon += 0.5;
+      }
+      res.send(hostels);
     // console.log(hostels.length);
 }
 catch(error){

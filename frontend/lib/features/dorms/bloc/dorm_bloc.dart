@@ -20,7 +20,9 @@ class DormBloc extends Bloc<DormEvent, DormState> {
     if (event is GetCollgesByName) {
       yield state.copyWith(isLoading: true);
       try {
+        print("object1");
         List<College> colleges = await _provider.getCollegesByName(event.name);
+
         yield state.copyWith(isLoading: false, colleges: colleges);
       } catch (e) {
         yield state.copyWith(isLoading: false, error: e.toString());
@@ -48,11 +50,13 @@ class DormBloc extends Bloc<DormEvent, DormState> {
         if (permission == LocationPermission.denied) {
           throw Exception("Location permission denied");
         }
+        print("object");
         final Position curPos = await Geolocator.getCurrentPosition();
         List<Hostel> hostels = await _provider.getCurrentNearbyHostels(
             curPos.latitude, curPos.longitude);
 
-        yield state.copyWith(isLoading: false, nearbyHostels: hostels);
+        yield state.copyWith(
+            isLoading: false, nearbyHostels: hostels, hostels: hostels);
       } catch (e) {
         yield state.copyWith(isLoading: false, error: e.toString());
       }
@@ -68,6 +72,8 @@ class DormBloc extends Bloc<DormEvent, DormState> {
         print("1");
         yield state.copyWith(error: "Can not launch the maps");
       }
+    } else if (event is SetSearchType) {
+      yield state.copyWith(isSearchHostels: event.val);
     }
   }
 }

@@ -5,10 +5,11 @@ class Hostel {
   final String adminName;
   final String address;
   final String contact;
-  final int collegeID;
   final String roomUrls;
   final String description;
   final int roomPrice;
+  final double latitude;
+  final double longitude;
   final int roomMateCount;
   final int availableRoomCount;
 
@@ -17,10 +18,11 @@ class Hostel {
     required this.adminName,
     required this.address,
     required this.contact,
-    required this.collegeID,
     required this.roomUrls,
     required this.description,
     required this.roomPrice,
+    required this.latitude,
+    required this.longitude,
     required this.roomMateCount,
     required this.availableRoomCount,
   });
@@ -31,10 +33,11 @@ class Hostel {
       'adminName': adminName,
       'address': address,
       'contact': contact,
-      'collegeID': collegeID,
       'roomUrls': roomUrls,
       'description': description,
       'roomPrice': roomPrice,
+      'latitude': latitude,
+      'longitude': longitude,
       'roomMateCount': roomMateCount,
       'availableRoomCount': availableRoomCount,
     };
@@ -43,15 +46,16 @@ class Hostel {
   factory Hostel.fromMap(Map<String, dynamic> map) {
     return Hostel(
       name: map['name'],
-      adminName: map['adminName'],
-      address: map['address'],
+      adminName: map['adminname'],
+      address: map['caddress'],
       contact: map['contact'],
-      collegeID: map['collegeID'],
-      roomUrls: map['roomUrls'],
+      roomUrls: map['roomurls'],
       description: map['description'],
-      roomPrice: map['roomPrice'],
-      roomMateCount: map['roomMateCount'],
-      availableRoomCount: map['availableRoomCount'],
+      roomPrice: map['roomprice'],
+      latitude: map['latitude'],
+      longitude: map['longitude'],
+      roomMateCount: map['roommatecount'],
+      availableRoomCount: map['availableroomcount'],
     );
   }
 
@@ -61,7 +65,7 @@ class Hostel {
 
   @override
   String toString() {
-    return 'Hostel(name: $name, adminName: $adminName, address: $address, contact: $contact, collegeID: $collegeID, roomUrls: $roomUrls, description: $description, roomPrice: $roomPrice, roomMateCount: $roomMateCount, availableRoomCount: $availableRoomCount)';
+    return 'Hostel(name: $name, adminName: $adminName, address: $address, contact: $contact, roomUrls: $roomUrls, description: $description, roomPrice: $roomPrice, latitude: $latitude, longitude: $longitude, roomMateCount: $roomMateCount, availableRoomCount: $availableRoomCount)';
   }
 
   @override
@@ -73,10 +77,11 @@ class Hostel {
         other.adminName == adminName &&
         other.address == address &&
         other.contact == contact &&
-        other.collegeID == collegeID &&
         other.roomUrls == roomUrls &&
         other.description == description &&
         other.roomPrice == roomPrice &&
+        other.latitude == latitude &&
+        other.longitude == longitude &&
         other.roomMateCount == roomMateCount &&
         other.availableRoomCount == availableRoomCount;
   }
@@ -87,11 +92,40 @@ class Hostel {
         adminName.hashCode ^
         address.hashCode ^
         contact.hashCode ^
-        collegeID.hashCode ^
         roomUrls.hashCode ^
         description.hashCode ^
         roomPrice.hashCode ^
+        latitude.hashCode ^
+        longitude.hashCode ^
         roomMateCount.hashCode ^
         availableRoomCount.hashCode;
+  }
+
+  Hostel copyWith({
+    String? name,
+    String? adminName,
+    String? address,
+    String? contact,
+    String? roomUrls,
+    String? description,
+    int? roomPrice,
+    double? latitude,
+    double? longitude,
+    int? roomMateCount,
+    int? availableRoomCount,
+  }) {
+    return Hostel(
+      name: name ?? this.name,
+      adminName: adminName ?? this.adminName,
+      address: address ?? this.address,
+      contact: contact ?? this.contact,
+      roomUrls: roomUrls ?? this.roomUrls,
+      description: description ?? this.description,
+      roomPrice: roomPrice ?? this.roomPrice,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      roomMateCount: roomMateCount ?? this.roomMateCount,
+      availableRoomCount: availableRoomCount ?? this.availableRoomCount,
+    );
   }
 }
