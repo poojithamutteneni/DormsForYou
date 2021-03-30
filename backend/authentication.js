@@ -3,14 +3,12 @@ const express = require('express');
 const bodyParser = require('body-parser')
 require("dotenv").config();
 var jwt = require('jsonwebtoken');
-const { Pool, Client } = require('pg');
-const tokenauth = require("./token");
+const { Pool } = require('pg');
 
 
 //initialize
 const app = express.Router();
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+
 
 
 //db connection
