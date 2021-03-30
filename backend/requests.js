@@ -61,10 +61,10 @@ app.post('/gethostelsbycid', (req,res) =>{
 
 //getHostelsNearbyCurrentLocation
 app.post('/getHostelsNearbyCurrentLocation', async (req,res) =>{
-  let minlat =  parseFloat(req.headers["latitude"]) - 0.5;
-  let maxlat =  parseFloat(req.headers["latitude"]) + 0.5;
-  let minlon =  parseFloat(req.headers["longitude"]) - 0.5;
-  let maxlon =  parseFloat(req.headers["longitude"]) + 0.5;
+  let minlat =  parseFloat(req.headers["latitude"]) - 0.2;
+  let maxlat =  parseFloat(req.headers["latitude"]) + 0.2;
+  let minlon =  parseFloat(req.headers["longitude"]) - 0.2;
+  let maxlon =  parseFloat(req.headers["longitude"]) + 0.2;
   let hostels;
 
   try{
@@ -75,10 +75,10 @@ app.post('/getHostelsNearbyCurrentLocation', async (req,res) =>{
     if(r.rows.length >= 2){
       break;
     }
-      minlat -= 0.5;
-      maxlat += 0.5;
-      minlon -= 0.5;
-      maxlon += 0.5;
+      minlat -= 0.2;
+      maxlat += 0.2;
+      minlon -= 0.2;
+      maxlon += 0.2;
       }
       res.send(hostels);
 }

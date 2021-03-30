@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser')
 require("dotenv").config();
 var jwt = require('jsonwebtoken');
+const tokenauth = require("./token");
 const { Pool } = require('pg');
 
 
@@ -26,6 +27,15 @@ const pool = new Pool({
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+
+//booking
+app.post('/authenticate', tokenauth, (req,res) =>{
+if(tokenauth){
+  res.send("Valid Token!");
+} else {
+  res.send("Please Sign in!");
+}
+})
 
 
  //login
