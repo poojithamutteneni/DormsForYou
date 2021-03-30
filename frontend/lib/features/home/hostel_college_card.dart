@@ -3,6 +3,7 @@ import 'package:dorms_for_you/di.dart';
 import 'package:dorms_for_you/features/dorms/bloc/dorm_bloc.dart';
 import 'package:dorms_for_you/features/dorms/hostel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HostelCard extends StatelessWidget {
   final Hostel hostel;
@@ -129,6 +130,16 @@ class CollegeSmallCard extends StatelessWidget {
           OutlinedButton(
               onPressed: () {
                 getIt.get<DormBloc>().add(GetHostelsByCID(college.id));
+
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return BlocProvider.value(
+                          value: getIt.get<DormBloc>(),
+                          child: NearByHostelsCID(
+                            name: college.name,
+                          ));
+                    });
               },
               child: const Text(
                 "Find all hostels nearby",
@@ -137,6 +148,37 @@ class CollegeSmallCard extends StatelessWidget {
             height: 8,
           )
         ],
+      ),
+    );
+  }
+}
+
+class NearByHostelsCID extends StatelessWidget {
+  final String name;
+
+  const NearByHostelsCID({Key? key, required this.name}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("All hostels nearby $name"),
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.7,
+        child: BlocBuilder<DormBloc, DormState>(
+          builder: (context, state) {
+            if (state.isLoading) {
+              return Center(child: const CircularProgressIndicator());
+            } else if (state.hostels.isEmpty) {
+              return const Text("No hostels found");
+            }
+            return ListView.builder(
+                shrinkWrap: true,
+                itemCount: state.hostels.length,
+                itemBuilder: (context, index) {
+                  return HostelSmallCard(state.hostels[index]);
+                });
+          },
+        ),
       ),
     );
   }

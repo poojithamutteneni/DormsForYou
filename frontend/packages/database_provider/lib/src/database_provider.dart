@@ -65,7 +65,7 @@ class DatabaseProvider implements IDatabaseProvider {
   Future<List<Hostel>> getHostelsByCID(int id) async {
     final u = Uri.parse('$url/request/gethostelsbycid');
     http.Response res =
-        await http.post(u, headers: <String, String>{'name': id.toString()});
+        await http.post(u, headers: <String, String>{'cid': id.toString()});
     if (res.statusCode == 200) {
       print(res.body);
       final Iterable l = json.decode(res.body);

@@ -30,8 +30,8 @@ class DormBloc extends Bloc<DormEvent, DormState> {
     } else if (event is GetHostelsByCID) {
       yield state.copyWith(isLoading: true);
       try {
-        List<Hostel> colleges = await _provider.getHostelsByCID(event.id);
-        yield state.copyWith(isLoading: false, hostels: colleges);
+        List<Hostel> hostels = await _provider.getHostelsByCID(event.id);
+        yield state.copyWith(isLoading: false, hostels: hostels);
       } catch (e) {
         yield state.copyWith(isLoading: false, error: e.toString());
       }
