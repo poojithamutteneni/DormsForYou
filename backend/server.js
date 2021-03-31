@@ -23,9 +23,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use('/auth',authentication)
 app.use('/request', requests)
-app.use(express.static('public'))
-
-
+app.use(express.static('public'));  
+app.use('/images', express.static('public/images'));
 
 //Listening
 app.listen(PORT, function(){

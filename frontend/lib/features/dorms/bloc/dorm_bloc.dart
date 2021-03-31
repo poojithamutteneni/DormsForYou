@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:database_provider/database_provider.dart';
+import 'package:dorms_for_you/di.dart';
+import 'package:dorms_for_you/features/authentication/cubit/authentication_cubit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -74,6 +76,18 @@ class DormBloc extends Bloc<DormEvent, DormState> {
       }
     } else if (event is SetSearchType) {
       yield state.copyWith(isSearchHostels: event.val);
+    } else if (event is BookHostel) {
+      yield state.copyWith(isLoading: true);
+      try {
+        await _provider.bookHostel(
+            getIt.get<AuthenticationCubit>().state.user.id.toString(),
+            event.toDate,
+            event.fromDate,
+            event.hid.toString());
+        yield state.copyWith(isLoading: false);
+      } catch (e) {
+        yield state.copyWith(isLoading: false, error: e.toString());
+      }
     }
   }
 }

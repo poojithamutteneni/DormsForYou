@@ -8,6 +8,14 @@ class GetHostelsNearBy implements DormEvent {
   const GetHostelsNearBy();
 }
 
+class BookHostel implements DormEvent {
+  final int hid;
+  final String fromDate;
+  final String toDate;
+
+  BookHostel(this.hid, this.fromDate, this.toDate);
+}
+
 class SetSearchType implements DormEvent {
   final bool val;
   const SetSearchType(this.val);

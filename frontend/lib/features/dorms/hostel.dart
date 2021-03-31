@@ -1,7 +1,13 @@
 import 'package:database_provider/database_provider.dart';
+import 'package:dorms_for_you/features/authentication/auth_screen/auth_screen.dart';
+import 'package:dorms_for_you/features/authentication/auth_screen/cubit/login_cubit.dart';
+import 'package:dorms_for_you/features/authentication/cubit/authentication_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_swiper/flutter_swiper.dart';
+
+import '../../di.dart';
 
 class HostelScreen extends StatelessWidget {
   final Hostel hostel;
@@ -12,7 +18,7 @@ class HostelScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(24.0),
           child: DefaultTextStyle(
             style: TextStyle(fontSize: 18, color: Colors.black),
             child: Column(
@@ -35,26 +41,42 @@ class HostelScreen extends StatelessWidget {
                 Container(
                     height: MediaQuery.of(context).size.height / 2.5,
                     child: HostelImages()),
-                const SizedBox(
-                  height: 32,
-                ),
-                Text("Price - ₹${hostel.roomPrice}"),
-                const SizedBox(
-                  height: 8,
-                ),
-                Text("Rooms Available : ${hostel.availableRoomCount}"),
-                const SizedBox(
-                  height: 8,
-                ),
-                Text("Students/Persons per room : ${hostel.roomMateCount}"),
-                const SizedBox(
-                  height: 8,
-                ),
-                Text("Description : ${hostel.description}"),
-                const SizedBox(
-                  height: 8,
-                ),
-                Text("Contact : ${hostel.contact}")
+                Center(
+                  child: Card(
+                    child: DefaultTextStyle(
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 32,
+                            ),
+                            Text("Price - ₹${hostel.roomPrice}"),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                                "Rooms Available : ${hostel.availableRoomCount}"),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                                "Students/Persons per room : ${hostel.roomMateCount}"),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text("Description : ${hostel.description}"),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text("Contact : ${hostel.contact}")
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -65,7 +87,37 @@ class HostelScreen extends StatelessWidget {
         children: [
           ElevatedButton(
               onPressed: () {
-                //TODO
+                if (getIt
+                    .get<AuthenticationCubit>()
+                    .state
+                    .user
+                    .isAuthenticated) {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Container(
+                          height: 150,
+                          child: AlertDialog(
+                            title: const Text("Booking status"),
+                            content: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text("Booking ID : #12"),
+                                const Text("Booked room successfully"),
+                              ],
+                            ),
+                          ),
+                        );
+                      });
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BlocProvider(
+                              create: (context) => getIt.get<LoginCubit>(),
+                              child: AuthScreen())));
+                }
               },
               child: const Text("Book")),
         ],
@@ -87,7 +139,7 @@ class HostelImages extends StatelessWidget {
               maxScale: 5,
               minScale: 1,
               child: new Image.network(
-                "https://images.unsplash.com/photo-1617056206529-539f0b118eb5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80",
+                "https://pix10.agoda.net/hotelImages/5404174/0/efe83e8f54e41ebfb4366f8649ba5813.jpg?s=1024x768",
                 fit: BoxFit.fitHeight,
               ),
             );

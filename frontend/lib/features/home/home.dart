@@ -2,13 +2,13 @@ import 'package:dorms_for_you/di.dart';
 import 'package:dorms_for_you/features/dorms/bloc/dorm_bloc.dart';
 import 'package:dorms_for_you/features/home/hostel_college_card.dart';
 import 'package:dorms_for_you/features/home/radios.dart';
+import 'package:dorms_for_you/features/home/show_more_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // final bool isLoading = context.watch<DormBloc>().state.isLoading;
     // final nearByHostels =
     //     context.select((DormBloc value) => value.state.nearbyHostels);
     return ListView(
@@ -28,10 +28,12 @@ class Home extends StatelessWidget {
                   alignment: Alignment.topRight,
                   child: GestureDetector(
                     onTap: () {
-                      //TODO
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) => ShowMoreOptions());
                     },
                     child: const Icon(
-                      Icons.account_circle_outlined,
+                      Icons.more_vert_outlined,
                       color: Colors.white,
                     ),
                   ),
@@ -41,9 +43,16 @@ class Home extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       BlocBuilder<DormBloc, DormState>(
-                          builder: (context, state) {
+                          buildWhen: (prevs, next) {
+                        if (prevs.nearbyHostels == next.nearbyHostels) {
+                          return false;
+                        } else
+                          return true;
+                      }, builder: (context, state) {
                         if (state.isLoading) {
-                          return const CircularProgressIndicator();
+                          return const CircularProgressIndicator(
+                            backgroundColor: Colors.white,
+                          );
                         } else if (state.nearbyHostels.isEmpty) {
                           return const Text("No Nearby Hostels");
                         } else if (state.nearbyHostels.isNotEmpty) {

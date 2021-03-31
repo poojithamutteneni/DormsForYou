@@ -11,7 +11,7 @@ class LoginCubit extends Cubit<LoginState> {
   final IAuthenticationReposiory _authenticationReposiory;
 
   void isSignUp() {
-    emit(state.copyWith(isSignUp: true));
+    emit(state.copyWith(isSignUp: !state.isSignUp));
   }
 
   String checkConfirmPassword(String val) {
@@ -26,25 +26,48 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(email: mail));
   }
 
+  void fullNameChanged(String name) {
+    emit(state.copyWith(name: name));
+  }
+
+  void dobChanged(String dob) {
+    emit(state.copyWith(dob: dob));
+  }
+
   void passwordChanged(String mail) {
     emit(state.copyWith(password: mail));
   }
 
   void confirmPasswordChanged(String mail) {
-    emit(state.copyWith(password: mail));
+    emit(state.copyWith(cpassword: mail));
   }
 
   void resetResult() {
     emit(state.copyWith(error: "", result: LoginResult.Unknown));
   }
 
-  Future signUp(String password, String email) async {
+  Future sign() async {
     emit(state.copyWith(isLoading: true));
     try {
-      final AuthUser user =
-          await _authenticationReposiory.signUp(email, password);
-      getIt.get<AuthenticationCubit>().setUser(user);
-      emit(state.copyWith(isLoading: false, result: LoginResult.Success));
+      AuthUser? user;
+      print(state.isSignUp);
+      if (state.isSignUp) {
+        print(state.password == state.cpassword);
+        if (state.password == state.cpassword) {
+          print("111");
+          user = await _authenticationReposiory.signUp(
+              state.email, state.password, state.name, state.dob);
+        } else {
+          emit(state.copyWith(showErrors: true));
+        }
+      } else {
+        user =
+            await _authenticationReposiory.signIn(state.email, state.password);
+      }
+      print(user);
+      getIt.get<AuthenticationCubit>().setUser(user ?? AuthUser.empty());
+      emit(state.copyWith(
+          isLoading: false, result: LoginResult.Success, showErrors: true));
     } catch (e) {
       emit(state.copyWith(
           isLoading: false, error: e.toString(), result: LoginResult.Failure));

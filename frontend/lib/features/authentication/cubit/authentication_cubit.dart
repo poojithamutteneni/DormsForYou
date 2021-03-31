@@ -15,8 +15,15 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   }
 
   Future<void> authenticate() async {
-    //TODO
+    emit(state.copyWith(isLoading: true));
+    try {
+      final AuthUser user = await _authenticationReposiory.authenticate();
+      emit(state.copyWith(user: user, isLoading: false));
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, error: e.toString()));
+    }
   }
+
   Future logout() async {
     emit(state.copyWith(isLoading: true));
     try {
