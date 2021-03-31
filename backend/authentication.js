@@ -53,7 +53,7 @@ if(tokenauth){
                   var token = jwt.sign({email: email}, process.env.TOKEN_SECRET)
                   var user = result.rows[0];
                   delete user.password;
-                  res.send({userdetails:result.rows, token:token});
+                  res.send({userdetails:user, token:token});
               } else {
                    res.send("password incorrect");
                        }

@@ -1,7 +1,13 @@
 import 'package:database_provider/database_provider.dart';
+import 'package:dorms_for_you/features/authentication/auth_screen/auth_screen.dart';
+import 'package:dorms_for_you/features/authentication/auth_screen/cubit/login_cubit.dart';
+import 'package:dorms_for_you/features/authentication/cubit/authentication_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_swiper/flutter_swiper.dart';
+
+import '../../di.dart';
 
 class HostelScreen extends StatelessWidget {
   final Hostel hostel;
@@ -65,7 +71,20 @@ class HostelScreen extends StatelessWidget {
         children: [
           ElevatedButton(
               onPressed: () {
-                //TODO
+                if (getIt
+                    .get<AuthenticationCubit>()
+                    .state
+                    .user
+                    .isAuthenticated) {
+                  //TODO
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BlocProvider(
+                              create: (context) => getIt.get<LoginCubit>(),
+                              child: AuthScreen())));
+                }
               },
               child: const Text("Book")),
         ],
@@ -87,7 +106,7 @@ class HostelImages extends StatelessWidget {
               maxScale: 5,
               minScale: 1,
               child: new Image.network(
-                "https://images.unsplash.com/photo-1617056206529-539f0b118eb5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80",
+                "https://images.unsplash.com/photo-1582721478779-0ae163c05a60?ixid=MXwxMjA3fDB8MHx0b3BpYy1mZWVkfDN8Ym84alFLVGFFMFl8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
                 fit: BoxFit.fitHeight,
               ),
             );

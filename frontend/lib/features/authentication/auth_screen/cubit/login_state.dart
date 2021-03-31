@@ -33,7 +33,8 @@ class LoginState extends Equatable {
       cpassword: "");
 
   @override
-  List<Object> get props => [showErrors, email, password, isLoading];
+  List<Object> get props =>
+      [showErrors, isSignUp, result, cpassword, email, password, isLoading];
 
   LoginState copyWith({
     bool? showErrors,

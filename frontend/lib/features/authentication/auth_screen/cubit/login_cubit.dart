@@ -11,7 +11,7 @@ class LoginCubit extends Cubit<LoginState> {
   final IAuthenticationReposiory _authenticationReposiory;
 
   void isSignUp() {
-    emit(state.copyWith(isSignUp: true));
+    emit(state.copyWith(isSignUp: !state.isSignUp));
   }
 
   String checkConfirmPassword(String val) {
@@ -38,13 +38,24 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(error: "", result: LoginResult.Unknown));
   }
 
-  Future signUp(String password, String email) async {
+  Future sign() async {
     emit(state.copyWith(isLoading: true));
     try {
-      final AuthUser user =
-          await _authenticationReposiory.signUp(email, password);
-      getIt.get<AuthenticationCubit>().setUser(user);
-      emit(state.copyWith(isLoading: false, result: LoginResult.Success));
+      AuthUser? user;
+      if (state.isSignUp) {
+        if (state.password == state.cpassword) {
+          user = await _authenticationReposiory.signUp(
+              state.email, state.password);
+        } else {
+          emit(state.copyWith(showErrors: true));
+        }
+      } else {
+        user =
+            await _authenticationReposiory.signIn(state.email, state.password);
+      }
+      getIt.get<AuthenticationCubit>().setUser(user ?? AuthUser.empty());
+      emit(state.copyWith(
+          isLoading: false, result: LoginResult.Success, showErrors: true));
     } catch (e) {
       emit(state.copyWith(
           isLoading: false, error: e.toString(), result: LoginResult.Failure));

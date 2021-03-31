@@ -74,6 +74,6 @@ class DormBloc extends Bloc<DormEvent, DormState> {
       }
     } else if (event is SetSearchType) {
       yield state.copyWith(isSearchHostels: event.val);
-    }
+    } else if (event is BookHostel) {}
   }
 }

@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // final bool isLoading = context.watch<DormBloc>().state.isLoading;
+    final bool isLoading = context.watch<DormBloc>().state.isLoading;
     // final nearByHostels =
     //     context.select((DormBloc value) => value.state.nearbyHostels);
     return ListView(
@@ -41,9 +41,16 @@ class Home extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       BlocBuilder<DormBloc, DormState>(
-                          builder: (context, state) {
+                          buildWhen: (prevs, next) {
+                        if (prevs.nearbyHostels == next.nearbyHostels) {
+                          return false;
+                        } else
+                          return true;
+                      }, builder: (context, state) {
                         if (state.isLoading) {
-                          return const CircularProgressIndicator();
+                          return const CircularProgressIndicator(
+                            backgroundColor: Colors.white,
+                          );
                         } else if (state.nearbyHostels.isEmpty) {
                           return const Text("No Nearby Hostels");
                         } else if (state.nearbyHostels.isNotEmpty) {

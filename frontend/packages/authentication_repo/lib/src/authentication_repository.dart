@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import 'models/user.dart';
@@ -18,25 +19,29 @@ class AuthFailed implements Exception {
 }
 
 class AuthenticationRepository implements IAuthenticationReposiory {
-  static const String url = "something.com";
+  static const String url = "http://192.168.1.106:6000/auth";
+  static const storage = FlutterSecureStorage();
+  static const String key = "jwt";
   @override
   Future<AuthUser> logout() async {
-    http.Response res = await http.get(Uri.parse("$url"));
+    http.Response res = await http.get(Uri.parse("$url/logout"));
     if (res.statusCode == 200) {
-      print(res.body);
+      storage.delete(key: "jwt");
       return AuthUser.empty();
     } else {
-      throw AuthFailed(msg: "Failed to get colleges from server!");
+      throw AuthFailed(msg: "Failed to get response from server!");
     }
   }
 
   @override
-  Future<AuthUser> signIn(String username, String password) async {
-    http.Response res = await http.post(Uri.parse("$url"),
-        headers: <String, String>{'username': username, 'password': password});
+  Future<AuthUser> signIn(String email, String password) async {
+    http.Response res = await http.post(Uri.parse("$url/login"),
+        headers: <String, String>{'email': email, 'password': password});
     if (res.statusCode == 200) {
       print(res.body);
-      return AuthUser.fromJson(json.decode(res.body));
+      final l = json.decode(res.body);
+      storage.write(key: key, value: l["token"]);
+      return AuthUser.fromMap(l['user']);
     } else {
       throw AuthFailed(msg: "Failed to get colleges from server!");
     }
@@ -44,11 +49,13 @@ class AuthenticationRepository implements IAuthenticationReposiory {
 
   @override
   Future<AuthUser> signUp(String email, String password) async {
-    http.Response res = await http.post(Uri.parse("$url"),
+    http.Response res = await http.post(Uri.parse("$url/auth/signup"),
         headers: <String, String>{'password': password, "email": email});
     if (res.statusCode == 200) {
       print(res.body);
-      return AuthUser.fromJson(json.decode(res.body));
+      final l = json.decode(res.body);
+      storage.write(key: key, value: l["token"]);
+      return AuthUser.fromMap(l['user']);
     } else {
       throw AuthFailed(msg: "Failed to get colleges from server!");
     }
