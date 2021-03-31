@@ -21,7 +21,7 @@ These instructions will get you a copy of the project up and running on your loc
 ```
 https://github.com/coding-Studio-vbit/DormsForYou.git
 ```
-2. Locate to backend folder
+2. Locate to the directory
 ```
 cd backend
 ```
@@ -33,7 +33,11 @@ npm install
 ```
 p = "your psql password here"
 ```
-5. Run the server
+5. Set up your postgresql database
+```
+Go to db_details folder and execute the commands
+```
+6. Run the server
 ```
 node server.js
 ```
