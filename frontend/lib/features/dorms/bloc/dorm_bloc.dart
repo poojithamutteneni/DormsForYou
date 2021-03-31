@@ -79,11 +79,6 @@ class DormBloc extends Bloc<DormEvent, DormState> {
     } else if (event is BookHostel) {
       yield state.copyWith(isLoading: true);
       try {
-        await _provider.bookHostel(
-            getIt.get<AuthenticationCubit>().state.user.id.toString(),
-            event.toDate,
-            event.fromDate,
-            event.hid.toString());
         yield state.copyWith(isLoading: false);
       } catch (e) {
         yield state.copyWith(isLoading: false, error: e.toString());

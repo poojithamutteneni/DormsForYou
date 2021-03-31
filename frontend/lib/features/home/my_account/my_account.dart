@@ -1,8 +1,11 @@
+import 'package:dorms_for_you/di.dart';
+import 'package:dorms_for_you/features/authentication/cubit/authentication_cubit.dart';
 import 'package:flutter/material.dart';
 
 class MyAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final user = getIt.get<AuthenticationCubit>().state.user;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -16,19 +19,22 @@ class MyAccount extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Hello, Revanth",
+                      Text("Hello, ${user.name}",
                           style: TextStyle(
                             fontSize: 32,
                           )),
-                      const Text(
-                        "r@gmail.com",
+                      Text(
+                        "${user.email}",
                       ),
                     ],
                   )),
               const SizedBox(
                 height: 16,
               ),
-              const Text("Booked Hostels"),
+              const Text(
+                "Booked Hostels",
+                style: TextStyle(color: Colors.blue),
+              ),
               const SizedBox(
                 height: 8,
               ),
