@@ -18,8 +18,7 @@ create table register_user(
 userid bigserial primary key,
 full_name varchar(200) not null,
 email varchar(200) not null,
-dob date not null,
-college_name varchar(200) not null,
+dob varchar(200) not null,
 password varchar(200) not null,
 unique(email));
 

@@ -10,6 +10,7 @@ abstract class IDatabaseProvider {
   Future<List<College>> getCollegesByName(String name);
   Future<List<Hostel>> getHostelByName(String name);
   Future<List<Hostel>> getHostelsByCID(int id);
+  Future<void> bookHostel(String uid, String to, String from, String hid);
 }
 
 class DatabaseProvider implements IDatabaseProvider {
@@ -73,5 +74,18 @@ class DatabaseProvider implements IDatabaseProvider {
     } else {
       throw Exception("Failed to get colleges from server!");
     }
+  }
+
+  @override
+  Future<void> bookHostel(
+      String uid, String to, String from, String hid) async {
+    final u = Uri.parse('$url/book');
+
+    await http.post(u, headers: <String, String>{
+      'cid': uid,
+      "to": to,
+      "from": from,
+      "hid": hid
+    });
   }
 }
