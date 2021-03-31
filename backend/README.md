@@ -1,12 +1,12 @@
 ## Dorms For You
-
+<hr>
 
 ### Getting Started
-<br/>
+<hr/>
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 
 ### Prerequisites
-<br>
+<hr>
 <ul>
   <li>Git</li>
   <li>Node.JS</li>
@@ -15,7 +15,7 @@ These instructions will get you a copy of the project up and running on your loc
 </ul>
 
 ### Installation
-<br>
+<hr>
 
 1. Clone the Repository
    ```
