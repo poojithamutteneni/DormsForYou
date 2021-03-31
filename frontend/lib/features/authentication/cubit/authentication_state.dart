@@ -15,7 +15,7 @@ class AuthenticationState extends Equatable {
       AuthenticationState(isLoading: false, user: AuthUser.empty(), error: "");
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [isLoading, user, error];
 
   AuthenticationState copyWith({
     bool? isLoading,
