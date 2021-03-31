@@ -26,12 +26,20 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(email: mail));
   }
 
+  void fullNameChanged(String name) {
+    emit(state.copyWith(name: name));
+  }
+
+  void dobChanged(String dob) {
+    emit(state.copyWith(dob: dob));
+  }
+
   void passwordChanged(String mail) {
     emit(state.copyWith(password: mail));
   }
 
   void confirmPasswordChanged(String mail) {
-    emit(state.copyWith(password: mail));
+    emit(state.copyWith(cpassword: mail));
   }
 
   void resetResult() {
@@ -42,10 +50,13 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(isLoading: true));
     try {
       AuthUser? user;
+      print(state.isSignUp);
       if (state.isSignUp) {
+        print(state.password == state.cpassword);
         if (state.password == state.cpassword) {
+          print("111");
           user = await _authenticationReposiory.signUp(
-              state.email, state.password);
+              state.email, state.password, state.name, state.dob);
         } else {
           emit(state.copyWith(showErrors: true));
         }
@@ -53,6 +64,7 @@ class LoginCubit extends Cubit<LoginState> {
         user =
             await _authenticationReposiory.signIn(state.email, state.password);
       }
+      print(user);
       getIt.get<AuthenticationCubit>().setUser(user ?? AuthUser.empty());
       emit(state.copyWith(
           isLoading: false, result: LoginResult.Success, showErrors: true));

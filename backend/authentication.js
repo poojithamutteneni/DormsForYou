@@ -71,10 +71,10 @@ if(tokenauth){
 
   //signup
   app.post('/signup', (req, res) => {
-  let {full_name,email,dob,college_name,password}=req.headers;
+  let {full_name,email,dob,password}=req.headers;
     bcrypt.genSalt(saltRounds, function (err, salt) {
           bcrypt.hash(password, salt, function (err, hash) {
-              pool.query("INSERT INTO register_user(full_name,email,dob,college_name,password) VALUES ($1, $2, $3, $4, $5)", [full_name, email, dob, college_name, hash],
+              pool.query("INSERT INTO register_user(full_name,email,dob,password) VALUES ($1, $2, $3, $4)", [full_name, email, dob, hash],
                   function (err, result) {
                       if (err) {
                           res.status(500);
