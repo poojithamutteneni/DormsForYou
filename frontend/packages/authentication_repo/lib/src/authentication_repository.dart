@@ -38,12 +38,13 @@ class AuthenticationRepository implements IAuthenticationReposiory {
     if (res.statusCode == 200) {
       print(res.body);
       final l = json.decode(res.body);
+      print(l['userdetails']);
       storage.write(key: "email", value: email);
-      storage.write(key: "name", value: l['user']['full_name']);
-      storage.write(key: "id", value: l['userdetails']["id"]);
+      storage.write(key: "name", value: l['userdetails']['full_name']);
+      storage.write(key: "id", value: l['userdetails']["userid"]);
 
       storage.write(key: key, value: l["token"]);
-      return AuthUser.fromMap(l['user']);
+      return AuthUser.fromMap(l['userdetails']);
     } else {
       throw AuthFailed(msg: "Failed to get colleges from server!");
     }
@@ -66,7 +67,7 @@ class AuthenticationRepository implements IAuthenticationReposiory {
       final l = json.decode(res.body);
       storage.write(key: "email", value: email);
       storage.write(key: "name", value: name);
-      storage.write(key: "id", value: l['userdetails']["id"]);
+      //storage.write(key: "id", value: l['userdetails']["userid"]);
       storage.write(key: key, value: l["token"]);
       return AuthUser.fromMap(l['userdetails']);
     } else {
@@ -84,14 +85,9 @@ class AuthenticationRepository implements IAuthenticationReposiory {
     if (res.statusCode == 200) {
       String? mail = await storage.read(key: "email");
       String? name = await storage.read(key: "name");
-      String? id = await storage.read(key: "id") ?? 0.toString();
       return AuthUser(
-          email: mail ?? "",
-          id: int.parse(id),
-          isAuthenticated: true,
-          name: name ?? "");
-    } else {
-      throw AuthFailed(msg: "Failed to get colleges from server!");
+          email: mail ?? "", isAuthenticated: true, name: name ?? "");
     }
+    return AuthUser.empty();
   }
 }

@@ -9,8 +9,9 @@ class AuthScreen extends StatelessWidget {
     final isSignUp = context.watch<LoginCubit>().state.isSignUp;
     return Scaffold(
       body: BlocListener<LoginCubit, LoginState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state.result == LoginResult.Success) {
+            await Future.delayed(const Duration(milliseconds: 1));
             Navigator.pop(context);
           }
         },
@@ -65,6 +66,7 @@ class AuthScreen extends StatelessWidget {
                       height: 8,
                     ),
                     TextFormField(
+                      obscureText: true,
                       onChanged: (v) {
                         context.read<LoginCubit>().passwordChanged(v);
                       },
@@ -92,6 +94,7 @@ class AuthScreen extends StatelessWidget {
                                   .read<LoginCubit>()
                                   .checkConfirmPassword(val ?? "");
                             },
+                            obscureText: true,
                             decoration:
                                 InputDecoration(labelText: "Confirm Password"),
                           )
