@@ -30,12 +30,12 @@ const saltRounds = 10;
 
 //authenticate
 app.post('/authenticate', tokenauth, (req,res) =>{
-if(tokenauth){
-  res.send("Valid Token!");
-} else {
-  res.status(500);
-  res.send("Please Sign in!");
-}
+  if(tokenauth){
+    res.send("Valid Token!");
+  } else {
+    res.status(500);
+    res.send("Please Sign in!");
+  }
 })
 
 
