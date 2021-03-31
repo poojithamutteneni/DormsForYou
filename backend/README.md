@@ -29,7 +29,11 @@ cd backend
 ```
 npm install
 ```
-4. Run the server
+4. Create a .env file
+```
+p = "your psql password here"
+```
+5. Run the server
 ```
 node server.js
 ```
