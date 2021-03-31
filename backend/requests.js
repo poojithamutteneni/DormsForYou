@@ -25,6 +25,7 @@ try{
       res.send(result.rows);
     }
   catch(error) {
+    res.status(500);
     console.log(error);
   }
 })
@@ -39,6 +40,7 @@ try{
       res.send(result.rows);
     }
   catch(error) {
+    res.status(500);
     console.log(error);
   }
 })
@@ -52,6 +54,7 @@ app.post('/gethostelsbycid', (req,res) =>{
          if (err) {
              console.log(err);
          } else {
+           res.status(500);
              res.send(result.rows);
          }
      });
@@ -83,6 +86,7 @@ app.post('/getHostelsNearbyCurrentLocation', async (req,res) =>{
       res.send(hostels);
 }
 catch(error){
+  res.status(500);
   console.log(error);
 }
 });
@@ -92,6 +96,7 @@ app.post('/book', tokenauth, (req,res) =>{
 if(tokenauth){
   res.send("Dorm has been booked!");
 } else {
+  res.status(500);
   res.send("Please Sign in!");
 }
 })

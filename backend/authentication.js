@@ -28,11 +28,12 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 
-//booking
+//authenticate
 app.post('/authenticate', tokenauth, (req,res) =>{
 if(tokenauth){
   res.send("Valid Token!");
 } else {
+  res.status(500);
   res.send("Please Sign in!");
 }
 })
@@ -40,9 +41,7 @@ if(tokenauth){
 
  //login
   app.post('/login', async (req,res) =>{
-    let email = req.body.email;
-    let password = req.body.password;
-
+    let {email,password}=req.headers;
     var myhashpass;
       await pool.query('SELECT * from register_user where email = $1',[email])
       .then((result) => {
@@ -55,12 +54,14 @@ if(tokenauth){
                   delete user.password;
                   res.send({userdetails:result.rows, token:token});
               } else {
+                   res.status(500);
                    res.send("password incorrect");
                        }
               })
 
       .catch((error) => {
-              pool.end();
+               pool.end();
+              res.status(500);
               console.log("Invalid login details");
           })
     })
@@ -70,15 +71,18 @@ if(tokenauth){
 
   //signup
   app.post('/signup', (req, res) => {
-  let {full_name,email,dob,college_name,password}=req.body;
+  let {full_name,email,dob,college_name,password}=req.headers;
     bcrypt.genSalt(saltRounds, function (err, salt) {
           bcrypt.hash(password, salt, function (err, hash) {
               pool.query("INSERT INTO register_user(full_name,email,dob,college_name,password) VALUES ($1, $2, $3, $4, $5)", [full_name, email, dob, college_name, hash],
                   function (err, result) {
                       if (err) {
+                          res.status(500);
                           console.log(err);
                       } else {
                           console.log('New user entered');
+                          var token = jwt.sign({email: email}, process.env.TOKEN_SECRET)
+                          res.send({userdetails:{full_name: full_name, email: email}, token:token});
                       }
                   });
           });
